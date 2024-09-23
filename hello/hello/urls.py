@@ -12,5 +12,6 @@ urlpatterns = [
  path('products/<int:productid>/', views.products),
  path('users/', views.users), 
  path('users/<int:id>/<str:name>/', views.users),
+ 
 
 ]
