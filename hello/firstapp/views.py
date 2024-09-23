@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.template.response import TemplateResponse
+from .forms import UserForm
+from django import forms
+
 
 def index(request):
  return HttpResponse("<h2>Глaвнaя</h2>")
@@ -71,3 +74,10 @@ def index(request):
 def index(request):
  cat = ["Ноутбуки", "Принтеры", "Сканеры", "Диски", "Шнуры"]
  return render(request, "firstapp/index.html", context={"cat": cat})
+
+def index(request):
+ userform = UserForm()
+ return render(request, "firstapp/index.html", {"form": userform})
+class UserForm(forms.Form):
+ file = forms.FileField(label="Файл")
+
