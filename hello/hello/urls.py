@@ -5,8 +5,9 @@ from firstapp import views
 
 urlpatterns = [
  path('', views.index),
- re_path(r'^about', views.about),
- re_path(r'^contact', views.contact),
+ path('about/', views.about),
+ path('contact/', views.contact),
+ path('details/', views.details),
  path('products/', views.products),
  path('products/<int:productid>/', views.products),
  path('users/', views.users), 
