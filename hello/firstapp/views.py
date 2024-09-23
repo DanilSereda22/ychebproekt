@@ -58,3 +58,8 @@ def index(request):
  addr}
  return TemplateResponse(request, "index.html", data)
 
+def index(request):
+ return render(request, "firstapp/home.html")
+
+def index(request):
+ return render(request, "firstapp/index.html")
