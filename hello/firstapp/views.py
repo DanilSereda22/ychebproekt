@@ -63,3 +63,11 @@ def index(request):
 
 def index(request):
  return render(request, "firstapp/index.html")
+
+def index(request):
+ data = {"age": 77}
+ return render(request, "firstapp/index.html", context=data)
+
+def index(request):
+ cat = ["Ноутбуки", "Принтеры", "Сканеры", "Диски", "Шнуры"]
+ return render(request, "firstapp/index.html", context={"cat": cat})
