@@ -63,28 +63,12 @@ def index(request):
  return TemplateResponse(request, "index.html", data)
 
 def index(request):
- return render(request, "firstapp/home.html")
-
-def index(request):
- return render(request, "firstapp/index.html")
-
-def index(request):
- data = {"age": 77}
- return render(request, "firstapp/index.html", context=data)
-
-def index(request):
- cat = ["Ноутбуки", "Принтеры", "Сканеры", "Диски", "Шнуры"]
- return render(request, "firstapp/index.html", context={"cat": cat})
-
-def index(request):
- userform = UserForm()
- return render(request, "firstapp/index.html", {"form": userform})
-
-def index(request):
- userform = UserForm()
  if request.method == "POST":
-  userform = UserForm(request.POST)
- if userform.is_valid():
-  name = userform.cleaned_data["name"]
-  return HttpResponse("<h2>Имя введено коррректно – {0}</h2>".format(name))
- return render(request, "firstapp/index.html", {"form": userform})
+  name = request.POST.get("name") # получить значения поля Имя
+  age = request.POST.get("age") # значения поля Возраст
+  output = "<h2>Пользователь</h2><h3>Имя - {0}, Возраст – {1}</h3>".format(name, age)
+  return HttpResponse(output)
+ else:
+  userform = UserForm()
+  return render(request, "firstapp/index.html", {"form": userform})
+
