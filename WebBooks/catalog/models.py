@@ -1,5 +1,14 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
+from datetime import date
+
+@property
+def is_overdue(self):
+ if self.due_back and date.today() > self.due_back:
+  return True
+ return False
+
 
 class MyModelName (models.Model):
     my_field_name = models.CharField(max_length=20,help_text="Не более 20 символов")
@@ -18,14 +27,14 @@ class Genre(models.Model):
  name = models.CharField(max_length=200,
  help_text=" Введите жанр книги", verbose_name="Жанр книги")
  def __str__(self):
-  return self.name
+   return self.name
 
 class Language(models.Model):
  name = models.CharField(max_length=20,
  help_text=" Введите язык книги", verbose_name="Язык книги")
  def __str__(self):
-  return self.name
-
+   return self.name
+ 
 class Author(models.Model):
  first_name = models.CharField(max_length=100, help_text="Введите имя автора",
  verbose_name="Имя автора")
@@ -35,10 +44,9 @@ class Author(models.Model):
  null=True, blank=True)
  date_of_death = models.DateField(help_text="Введите дату смерти", verbose_name="Дата смерти",
  null=True, blank=True)
-
  def __str__(self):
-   return self.last_name
-
+  return self.last_name
+ 
 class Book(models.Model):
  title = models.CharField(max_length=200,
  help_text="Введите название книги",
@@ -49,7 +57,7 @@ class Book(models.Model):
  language = models.ForeignKey('Language',
  on_delete=models.CASCADE,
  help_text="Выберите язык книги",
- verbose_name="Язык книги")
+ verbose_name="Язык книги", null=True)
  author = models.ManyToManyField('Author',
  help_text="Выберите автора книги",
  verbose_name="Автор книги")
@@ -60,9 +68,10 @@ class Book(models.Model):
  help_text="Должно содержать 13 символов",
  verbose_name="ISBN книги")
  def __str__(self):
-   return self.title
+  return self.title
  def get_absolute_url(self):
-   return reverse('book-detail', args=[str(self.id)])
+ # Возвращает url-адрес для доступа к определенному экземпляру книги.
+  return reverse('book-detail', args=[str(self.id)])
  def display_author(self):
   return ', '.join([author.last_name for author in self.author.all()])
  display_author.short_description = 'Авторы'
@@ -72,11 +81,12 @@ class Status(models.Model):
  help_text="Введите статус экземпляра книги",
  verbose_name="Статус экземпляра книги")
  def __str__(self):
-   return self.name
-
+  return self.name
+ 
 class BookInstance(models.Model):
  book = models.ForeignKey('Book', on_delete=models.CASCADE,
- null=True)
+ null=True,
+ verbose_name="Название книги")
  inv_nom = models.CharField(max_length=20, null=True,
  help_text="Введите инвентарный номер экземпляра",
  verbose_name="Инвентарный номер")
@@ -90,8 +100,9 @@ class BookInstance(models.Model):
  due_back = models.DateField(null=True, blank=True,
  help_text="Введите конец срока статуса",
  verbose_name="Дата окончания статуса")
- def __str__(self):
-  return '%s %s %s' % (self.inv_nom, self.book, self.status)
+ borrower = models.ForeignKey(User, on_delete=models.SET_NULL,
+ null=True, blank=True,
+ verbose_name="Заказчик",
+ help_text='Выберите заказчика книги')
 
-
-
+ 
